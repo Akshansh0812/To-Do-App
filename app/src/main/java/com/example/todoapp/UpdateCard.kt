@@ -5,35 +5,65 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import androidx.room.Room
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
+
+// updating and deleting data from list and database
 class UpdateCard : AppCompatActivity() {
+
+    private lateinit var database : Database
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_update_card)
 
-        val create_title = findViewById<EditText>(R.id.create_title)
-        val create_priority = findViewById<EditText>(R.id.create_priority)
-        val delete_button = findViewById<Button>(R.id.delete_button)
-        val update_button = findViewById<Button>(R.id.update_button)
+        database = Room.databaseBuilder(
+            applicationContext,
+            Database::class.java,
+            "TO_DO"
+        ).build()
+
+        val createTitle = findViewById<EditText>(R.id.create_title)
+        val createPriority = findViewById<EditText>(R.id.create_priority)
+        val deleteButton = findViewById<Button>(R.id.delete_button)
+        val updateButton = findViewById<Button>(R.id.update_button)
+
+
 
         val pos = intent.getIntExtra("id", -1)
         if (pos != -1) {
             val title = DataObject.getData(pos).title
             val priority = DataObject.getData(pos).priority
-            create_title.setText(title)
-            create_priority.setText(priority)
+            createTitle.setText(title)
+            createPriority.setText(priority)
 
-            delete_button.setOnClickListener {
+            deleteButton.setOnClickListener {
                 DataObject.deleteData(pos)
+                GlobalScope.launch{
+                    database.dao().deleteTask(
+                        Entity(pos+1,
+                            createTitle.text.toString(),
+                            createPriority.text.toString())
+                    )
+                }
+
                 myIntent()
             }
 
-            update_button.setOnClickListener {
+            updateButton.setOnClickListener {
                 DataObject.updateData(
                     pos,
-                    create_title.text.toString(),
-                    create_priority.text.toString()
+                    createTitle.text.toString(),
+                    createPriority.text.toString()
                 )
+                GlobalScope.launch{
+                    database.dao().updateTask(
+                        Entity(pos+1,
+                            createTitle.text.toString(),
+                            createPriority.text.toString())
+                    )
+                }
                 myIntent()
             }
         }
