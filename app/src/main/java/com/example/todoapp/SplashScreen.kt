@@ -23,7 +23,7 @@ class SplashScreen : AppCompatActivity() {
         ).build()
 
         GlobalScope.launch{
-            DataObject.listdata = database.dao().getTasks() as MutableList<CardInfo>
+            DataObject.listData = database.dao().getTasks() as MutableList<CardInfo>
         }
 
         Handler(Looper.getMainLooper()).postDelayed({

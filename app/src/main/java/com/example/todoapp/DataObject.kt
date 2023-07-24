@@ -2,30 +2,30 @@ package com.example.todoapp
 
 object DataObject {
 
-    var listdata = mutableListOf<CardInfo>()
+    var listData = mutableListOf<CardInfo>()
 
     fun setData(title: String, priority:String){
-        listdata.add(CardInfo(title,priority))
+        listData.add(CardInfo(title,priority))
     }
 
     fun getAllData():List<CardInfo>{
-        return listdata
+        return listData
     }
 
     fun deleteAll(){
-        listdata.clear()
+        listData.clear()
     }
 
     fun getData(pos:Int):CardInfo{
-        return listdata[pos]
+        return listData[pos]
     }
 
     fun deleteData(pos : Int){
-        listdata.removeAt(pos)
+        listData.removeAt(pos)
     }
 
     fun updateData(pos: Int, title: String, priority: String) {
-        listdata[pos].title = title
-        listdata[pos].priority = priority
+        listData[pos].title = title
+        listData[pos].priority = priority
     }
 }

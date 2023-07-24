@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.room.Room
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -30,10 +32,10 @@ class CreateCard : AppCompatActivity() {
 
         saveButton.setOnClickListener {
             if (createTitle.text.toString().trim { it <= ' ' }.isNotEmpty()
-                && createTitle.text.toString().trim { it <= ' ' }.isNotEmpty()
+                && createPriority.text.toString().trim { it <= ' ' }.isNotEmpty()
             ) {
-                var title = createTitle.text.toString()
-                var priority = createPriority.text.toString()
+                val title = createTitle.text.toString()
+                val priority = createPriority.text.toString()
 
                 DataObject.setData(title, priority) // Storing data in list
 
@@ -43,6 +45,21 @@ class CreateCard : AppCompatActivity() {
 
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
+            }
+
+            if (createTitle.text.toString().trim { it <= ' ' }.isEmpty()
+                && createPriority.text.toString().trim { it <= ' ' }.isEmpty()
+            ){
+                Toast.makeText(this,"Enter Task and Priority",Toast.LENGTH_SHORT).show()
+            }
+
+            if (createTitle.text.toString().trim { it <= ' ' }.isEmpty()
+
+            ){
+                Toast.makeText(this,"Enter Task",Toast.LENGTH_SHORT).show()
+            }
+            if(createPriority.text.toString().trim { it <= ' ' }.isEmpty()){
+                Toast.makeText(this,"Enter Priority",Toast.LENGTH_SHORT).show()
             }
         }
     }
